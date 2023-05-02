@@ -19,7 +19,6 @@ async def video_detail(url):
 
     response = requests.get(url, headers=headers, params=querystring, )
     res = response.json()
-    await MyStates.url.set()
     return res
 
 

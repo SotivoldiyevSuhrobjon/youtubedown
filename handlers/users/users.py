@@ -1,15 +1,9 @@
 from pprint import pprint
-
 from aiogram.dispatcher import FSMContext
-from pytube import YouTube
 from aiogram import Dispatcher
 from aiogram.types import *
-from playhouse.shortcuts import model_to_dict
-import json
 
 from keyboards.inline.youtube_keyboard import choose_size
-from loader import dp
-import requests
 from loader import bot
 from states.AllStates import MyStates
 from utils.misc.youtube_function import video_detail, size_detail, link_detail
@@ -53,6 +47,7 @@ async def youtube_download_handler(msg: Message):
     btn = await choose_size(quality)
     title = video_dict['title']
     await msg.answer_photo(photo_url, caption=title, reply_markup=btn)
+    await MyStates.url.set()
 
 
 # url = "https://youtube-media-downloader.p.rapidapi.com/v2/video/details"
@@ -87,8 +82,8 @@ async def youtube_download_handler(msg: Message):
 
 async def send_video_callback_handler(call: CallbackQuery, state: FSMContext):
     await call.answer()
-    url_dict = call.message.text
-    text = call.data
+    text = call.message.text
+    print(text)
     quality = text.split(':')[-1]
     link = await link_detail(url_dict, quality)
 
